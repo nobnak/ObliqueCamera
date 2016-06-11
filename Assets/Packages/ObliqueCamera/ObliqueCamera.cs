@@ -7,6 +7,8 @@ namespace ObliqueCameraSystem {
 	public class ObliqueCamera : MonoBehaviour {
 		public Transform target;
 
+		public bool debug;
+
 		Camera _attachedCam;
 
 		void OnEnable() {
@@ -39,6 +41,14 @@ namespace ObliqueCameraSystem {
 			                                    	 proj[10] = fnInv;        proj[14] = -fnInv*n;
 			                                                                  proj [15] = 1f;
 			_attachedCam.projectionMatrix = proj;
+		}
+		void OnRenderObject() {
+			if ((Camera.current.cullingMask & (1 << gameObject.layer)) == 0)
+				return;
+			if (!debug || target == null)
+				return;
+
+			var t = _attachedCam.worldToCameraMatrix.MultiplyPoint3x4 (target.position);
 		}
 	}
 }
