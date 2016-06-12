@@ -131,6 +131,9 @@ namespace Gist {
             GL.End ();
             GL.PopMatrix ();
         }
+		public void DrawLines(IEnumerable<Vector3> vertices, Transform trs, Color color, int mode) {
+			DrawLines (vertices, Camera.current.worldToCameraMatrix * trs.localToWorldMatrix, color, mode);
+		}
 		public void DrawLines(IEnumerable<Vector3> vertices, Matrix4x4 modelViewMat, Color color, int mode) {
 			_lineMat.SetPass (0);
 			GL.PushMatrix ();
