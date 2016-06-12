@@ -9,7 +9,7 @@ public class TestMatrix : MonoBehaviour {
 	void Start () {
 		_attachedCam = GetComponent<Camera> ();
 
-		var nearClip = new Vector4 (0f, 0f, -_attachedCam.nearClipPlane, -1f);
+		var nearClip = new Vector4 (0f, 0f, -1f, -_attachedCam.nearClipPlane);
 		Debug.Log (_attachedCam.projectionMatrix);
 		Debug.Log (_attachedCam.CalculateObliqueMatrix (nearClip));
 	}
