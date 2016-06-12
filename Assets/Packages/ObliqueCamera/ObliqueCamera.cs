@@ -13,7 +13,6 @@ namespace ObliqueCameraSystem {
 		Camera _attachedCam;
 		FrustumDrawer _drawer;
 		Matrix4x4 _proj;
-		Matrix4x4 _invProj;
 
 		void OnEnable() {
 			_attachedCam = GetComponent<Camera> ();
