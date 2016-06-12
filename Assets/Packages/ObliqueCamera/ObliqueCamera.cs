@@ -11,17 +11,17 @@ namespace ObliqueCameraSystem {
 		public bool debug;
 
 		Camera _attachedCam;
-		GLFigure _fig;
+		FrustumDrawer _drawer;
 		Matrix4x4 _proj;
 		Matrix4x4 _invProj;
 
 		void OnEnable() {
 			_attachedCam = GetComponent<Camera> ();
-			_fig = new GLFigure ();
+			_drawer = new FrustumDrawer (_attachedCam);
 		}
 		void OnDisable() {
 			_attachedCam.ResetProjectionMatrix ();
-			_fig.Dispose ();
+			_drawer.Dispose ();
 		}
 		void Update () {
 			if (target == null)
@@ -50,28 +50,11 @@ namespace ObliqueCameraSystem {
 			_invProj = _proj.inverse;			
 		}
 		void OnRenderObject() {
-			if (!debug || target == null || _attachedCam == null)
+			if (!debug || _drawer == null)
 				return;
-
 			if ((Camera.current.cullingMask & (1 << gameObject.layer)) == 0)
 				return;
-			var t = _attachedCam.worldToCameraMatrix.MultiplyPoint3x4 (target.position);
-			var linesInViewport = new Vector3[] {
-				new Vector3 (-1f, -1f, t.z), new Vector3 (-1f,  1f, t.z),
-				new Vector3 (-1f,  1f, t.z), new Vector3 ( 1f,  1f, t.z),
-				new Vector3 ( 1f,  1f, t.z), new Vector3 ( 1f, -1f, t.z),
-				new Vector3 ( 1f, -1f, t.z), new Vector3 (-1f, -1f, t.z)
-			};
-			var linesInWorld = new Vector3[linesInViewport.Length];
-			for (var i = 0; i < linesInViewport.Length; i++)
-				linesInWorld [i] = NDCWithZ2World(linesInViewport [i]);
-			_fig.DrawLines (linesInWorld, Camera.current.worldToCameraMatrix, Color.white, GL.LINES);
-		}
-		Vector3 NDCWithZ2World(Vector3 pos) {
-			var f = -_attachedCam.farClipPlane;
-			var n = -_attachedCam.nearClipPlane;
-			pos.z = (pos.z - n) / (f - n);
-			return (_attachedCam.cameraToWorldMatrix * _invProj).MultiplyPoint3x4 (pos);
+			_drawer.DrawFrustum ();
 		}
 	}
 }
