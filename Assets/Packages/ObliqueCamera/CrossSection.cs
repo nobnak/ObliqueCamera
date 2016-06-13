@@ -27,6 +27,6 @@ namespace ObliqueCameraSystem {
 
             
         }
-        IEnumerable<Vector3> 
+        
     }
 }
