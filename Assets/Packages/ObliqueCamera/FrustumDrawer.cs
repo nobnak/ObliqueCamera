@@ -23,13 +23,13 @@ namespace ObliqueCameraSystem {
 		}
 		#endregion
 
-		public void DrawFrustum() {
+        public void DrawFrustum(Color color) {
 			var ndc2world = _targetCam.cameraToWorldMatrix * _targetCam.projectionMatrix.inverse;
-			DrawFrustum (ndc2world);
+            DrawFrustum (ndc2world, color);
 		}
 
-		void DrawFrustum(Matrix4x4 ndc2world) {
-			_fig.DrawLines (FrustumEdges(ndc2world), Camera.current.worldToCameraMatrix, Color.white, GL.LINES);
+        void DrawFrustum(Matrix4x4 ndc2world, Color color) {
+			_fig.DrawLines (FrustumEdges(ndc2world), Camera.current.worldToCameraMatrix, color, GL.LINES);
 		}
 		IEnumerable<Vector3> FrustumEdges(Matrix4x4 ndc2world) {
 			for (var i = 0; i < EdgesInNDC.Length; i += 2) {

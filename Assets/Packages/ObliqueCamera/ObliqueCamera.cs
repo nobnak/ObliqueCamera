@@ -9,11 +9,11 @@ namespace ObliqueCameraSystem {
 		public Transform target;
 
 		public bool debug;
+        public Color lineColor = Color.gray;
 
 		Camera _attachedCam;
 		FrustumDrawer _drawer;
 		Matrix4x4 _proj;
-		Matrix4x4 _invProj;
 
 		void OnEnable() {
 			_attachedCam = GetComponent<Camera> ();
@@ -49,14 +49,13 @@ namespace ObliqueCameraSystem {
 			                                  _proj[10] = fnInv;        _proj[14] = -fnInv*n;
 			                                                            _proj [15] = 1f;
 			_attachedCam.projectionMatrix = _proj;
-			_invProj = _proj.inverse;
 		}
 		void OnRenderObject() {
 			if (!debug || _drawer == null)
 				return;
 			if ((Camera.current.cullingMask & (1 << gameObject.layer)) == 0)
 				return;
-			_drawer.DrawFrustum ();
+            _drawer.DrawFrustum (lineColor);
 		}
 	}
 }
