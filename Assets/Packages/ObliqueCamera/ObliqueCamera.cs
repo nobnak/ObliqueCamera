@@ -13,6 +13,7 @@ namespace ObliqueCameraSystem {
 		Camera _attachedCam;
 		FrustumDrawer _drawer;
 		Matrix4x4 _proj;
+		Matrix4x4 _invProj;
 
 		void OnEnable() {
 			_attachedCam = GetComponent<Camera> ();
@@ -25,6 +26,8 @@ namespace ObliqueCameraSystem {
 		void Update () {
 			if (target == null)
 				return;
+
+			transform.rotation = target.rotation;
 
 			var t = _attachedCam.worldToCameraMatrix.MultiplyPoint3x4(target.position);
 			if (-Mathf.Epsilon <= t.z && t.z <= Mathf.Epsilon)
@@ -46,7 +49,7 @@ namespace ObliqueCameraSystem {
 			                                  _proj[10] = fnInv;        _proj[14] = -fnInv*n;
 			                                                            _proj [15] = 1f;
 			_attachedCam.projectionMatrix = _proj;
-			_invProj = _proj.inverse;			
+			_invProj = _proj.inverse;
 		}
 		void OnRenderObject() {
 			if (!debug || _drawer == null)
